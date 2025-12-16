@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { Cart } from "../../lib/types/cart.type"
-import { addItem, createCart, fetchCart } from "../../lib/services/cart.service"
+import { addItem, clearCart, createCart, fetchCart } from "../../lib/services/cart.service"
 
 interface CartState {
   cart: Cart | null
@@ -46,6 +46,16 @@ const cartSlice = createSlice({
         state.cart = action.payload
       })
       .addCase(addItem.rejected, (state) => {
+        state.loading = "failed"
+      })
+      .addCase(clearCart.pending, (state) => {
+        state.loading = "pending"
+      })
+      .addCase(clearCart.fulfilled, (state, action) => {
+        state.loading = "succeeded"
+        state.cart = action.payload
+      })
+      .addCase(clearCart.rejected, (state) => {
         state.loading = "failed"
       })
   }

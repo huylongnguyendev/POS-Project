@@ -1,4 +1,5 @@
 using PosApi.Services;
+using PosApi.Hubs;
 
 var builder = WebApplication.CreateBuilder();
 
@@ -28,6 +29,7 @@ builder.Services.AddCors(option =>
 
 builder.Services.AddSingleton<ProductService>();
 builder.Services.AddSingleton<CartService>();
+builder.Services.AddSingleton<IOrderService, OrderService>();
 
 var app = builder.Build();
 
@@ -35,11 +37,12 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "POS API v1");
-    c.RoutePrefix = "swagger"; // truy cập qua /swagger
+    c.RoutePrefix = "swagger";
 });
 
-app.UseCors();
 app.UseHttpsRedirection();
+app.UseCors();
 app.MapControllers();
+app.MapHub<OrderHub>("/api/v1/orderHub");
 
 app.Run();

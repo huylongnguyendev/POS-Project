@@ -41,4 +41,14 @@ public class CartController : ControllerBase
     _cartService.AddItem(id, item);
     return Ok(_cartService.GetCart(id));
   }
+
+  [HttpDelete("{id}/clear")]
+  public IActionResult ClearCart(Guid id)
+  {
+    var cart = _cartService.GetCart(id);
+    if (cart == null) return NotFound();
+    _cartService.ClearCart(cart.Id);
+
+    return Ok(cart);
+  }
 }

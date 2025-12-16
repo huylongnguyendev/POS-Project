@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using PosApi.Models;
 
 namespace PosApi.Services
@@ -37,6 +38,15 @@ namespace PosApi.Services
         else
           cart.Items.Add(item);
       }
+    }
+
+    public void ClearCart(Guid cartId)
+    {
+      if(_carts.TryGetValue(cartId, out var cart))
+      {
+        cart.Items.Clear();
+      }
+
     }
   }
 }

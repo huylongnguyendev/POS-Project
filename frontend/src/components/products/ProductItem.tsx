@@ -4,7 +4,7 @@ import { addItem } from "../../lib/services/cart.service"
 import type { CartItemType } from "../../lib/types/cart.type"
 import type { ProductType } from "../../lib/types/product.type"
 import { Button } from "../ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
 
 export default function ProductItem({ item }: { item: ProductType }) {
   const { id, name, price, stock } = item
@@ -29,15 +29,11 @@ export default function ProductItem({ item }: { item: ProductType }) {
   return (
     <>
       <Card>
-        <CardContent className="h-52 rounded-md overflow-hidden">
-          <img src="abc" alt={name} className="size-full object-cover" />
-        </CardContent>
         <CardHeader className="gap-1">
           <CardTitle>{name}</CardTitle>
-          <CardDescription>{stock}</CardDescription>
           <CardDescription className="font-semibold text-primary ms-auto text-lg">{price.toLocaleString("vn")}đ</CardDescription>
         </CardHeader>
-        <CardFooter>
+        <CardFooter className="mt-auto">
           <Button
             disabled={stock <= 0}
             className="w-full"
