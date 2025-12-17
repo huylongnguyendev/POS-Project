@@ -2,53 +2,47 @@ using Microsoft.AspNetCore.Mvc;
 using PosApi.Models;
 using PosApi.Services;
 
-namespace PosApi.Controllers;
-
-[ApiController]
-[Route("api/v1/cart")]
-public class CartController : ControllerBase
+namespace PosApi.Controllers
 {
-  private readonly CartService _cartService;
-
-  public CartController(CartService cartService)
+  [ApiController]
+  [Route("api/v1/carts")]
+  public class CartController : ControllerBase
   {
-    _cartService = cartService;
-  }
+    private readonly CartService _cartService;
 
-  [HttpPost("create")]
-  public IActionResult CreateCart()
-  {
-    var cart = _cartService.CreateCart();
-    return Ok(cart);
-  }
+    public CartController(CartService cartService)
+    {
+      _cartService = cartService;
+    }
 
-  [HttpGet("{id}")]
-  public IActionResult GetCart(Guid id)
-  {
-    var cart = _cartService.GetCart(id);
-    if (cart == null) return NotFound();
+    [HttpGet("{id}")]
+    public IActionResult GetCartById(Guid id)
+    {
+      var cart = _cartService.GetCart(id);
+      if (cart == null) return NotFound();
 
-    return Ok(cart);
-  }
+      return Ok(cart);
+    }
 
-  [HttpPost("{id}/add")]
-  public IActionResult AddItem(Guid id, [FromBody] CartItem item)
-  {
-    var cart = _cartService.GetCart(id);
-    if (cart == null)
-      return NotFound();
+    [HttpPost]
+    public IActionResult CreateCart()
+    {
+      var cart = _cartService.CreateCart();
+      return Ok(cart);
+    }
 
-    _cartService.AddItem(id, item);
-    return Ok(_cartService.GetCart(id));
-  }
+    [HttpPost("{id}/add")]
+    public IActionResult AddItem(Guid id, [FromBody] CartItem item)
+    {
+      _cartService.AddItem(id, item);
+      return Ok();
+    }
 
-  [HttpDelete("{id}/clear")]
-  public IActionResult ClearCart(Guid id)
-  {
-    var cart = _cartService.GetCart(id);
-    if (cart == null) return NotFound();
-    _cartService.ClearCart(cart.Id);
-
-    return Ok(cart);
+    [HttpDelete("{id}")]
+    public IActionResult ClearCart(Guid id)
+    {
+      _cartService.ClearCart(id);
+      return Ok();
+    }
   }
 }

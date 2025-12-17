@@ -5,12 +5,12 @@ namespace PosApi.Services
 {
   public class CartService
   {
-
     private readonly Dictionary<Guid, Cart> _carts = new();
 
-    public Cart? GetCart(Guid cartId)
+    public Cart? GetCart(Guid id)
     {
-      _carts.TryGetValue(cartId, out var cart);
+      _carts.TryGetValue(id, out var cart);
+
       return cart;
     }
 
@@ -18,35 +18,42 @@ namespace PosApi.Services
     {
       var cart = new Cart();
       _carts[cart.Id] = cart;
-      
+
       return cart;
     }
 
-    public void AddItem(Guid cartId, CartItem item)
+    public void AddItem(Guid id, CartItem cartItem)
     {
-      if (_carts.TryGetValue(cartId, out var cart))
-      {
+      _carts.TryGetValue(id, out var cart);
 
-        var isExisting = cart.Items.FirstOrDefault(i =>
-          i.ProductId == item.ProductId
+      if (cart != null)
+      {
+        var items = cart.Items;
+        var existing = items.FirstOrDefault(
+          item => item.ProductId == cartItem.ProductId
         );
-        if (isExisting != null)
+
+        if (existing != null && existing.Price == cartItem.Price)
         {
-          isExisting.Quantity += item.Quantity;
-          isExisting.Price = isExisting.Quantity * item.Price;
+          existing.Quantity += cartItem.Quantity;
+          existing.Price = existing.Quantity * cartItem.Price;
         }
         else
-          cart.Items.Add(item);
+        {
+          cartItem.Price *= cartItem.Quantity;
+          items.Add(cartItem);
+        }
       }
     }
 
-    public void ClearCart(Guid cartId)
+    public void ClearCart(Guid id)
     {
-      if(_carts.TryGetValue(cartId, out var cart))
+      _carts.TryGetValue(id, out var cart);
+      
+      if(cart != null)
       {
         cart.Items.Clear();
       }
-
     }
   }
 }
