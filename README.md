@@ -31,9 +31,9 @@ Hệ thống bán hàng (POS) đơn giản gồm:
 
 - Chạy bằng Docker:
   - Các lệnh:
-    - Build dự án: docker-compose build
-    - Run dự án: docker-compose up -d
-    - Stop dự án: docker-compose down
+    - Build: docker-compose build
+    - Run: docker-compose up -d
+    - Stop: docker-compose down
 - Chạy thủ công
   - Frontend: cd frontend && npm install && npm run dev
   - Backend: cd backend/PosApi && dotnet restore && dotnet run
