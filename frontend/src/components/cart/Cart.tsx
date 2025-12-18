@@ -1,32 +1,10 @@
 import { PackageOpen } from "lucide-react"
 import CartItem from "./CartItem"
-import { useEffect } from "react"
-import { useAppDispatch, useAppSelector } from "../../lib/hooks/redux.hook"
-import type { Cart } from "../../lib/types/cart.type"
-import { createCart, fetchCart } from "../../lib/services/cart.service"
-
+import { useAppSelector } from "../../lib/hooks/redux.hook"
 
 export default function CartBox() {
   const cart = useAppSelector((state) => state.cart.cart)
-  const dispatch = useAppDispatch()
-
-  const saveId = (payload: Cart) => {
-    const newCart = payload
-    if (newCart?.id)
-      localStorage.setItem("id", newCart.id)
-  }
-
-  useEffect(() => {
-    const id = localStorage.getItem("id")
-    console.log(id)
-    if (!id) {
-      dispatch(createCart()).then((action) => {
-        saveId(action.payload)
-      })
-    } else {
-      dispatch(fetchCart(id))
-    }
-  }, [dispatch])
+  
 
   return (
     <>
